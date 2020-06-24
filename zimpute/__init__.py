@@ -7,5 +7,5 @@ Created on Fri Jan 31 12:50:21 2020
 """
 
 #coding=utf-8
-# from myPthon import * 时导入的模块名
-__all__=['zsh']
+# from myPthon import * 
+__all__=['zhousihan']

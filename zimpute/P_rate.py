@@ -10,42 +10,34 @@ import numpy as np
 import Load_data
 import zhousihan
 
-#raw=np.array([[2,2,0,0],[2,2,0,0],[2,2,0,0]])
+def p_rate(raw,drop,zimpute):
 
-raw=Load_data.Load_Matrix(r"/Users/sihanzhou/Desktop/work/data_csv/sim_500x2000_fix.csv")
+    m,n=np.shape(raw)
 
-#drop=np.array([[2,0,0,0],[2,0,0,0],[2,0,0,0]])
-drop=Load_data.Load_Matrix(r"/Users/sihanzhou/Desktop/work/data_csv/sim_2_50_fix.csv")
+    A_raw=np.float64(raw>0)
 
-#zimpute=zhousihan.Impute(drop,1,0.01,"T")
-zimpute=Load_data.Load_Matrix(r"/Users/sihanzhou/Desktop/work/data_csv/scimpute_2_50_fix.csv")
-#zimpute=zimpute.T
+    A_drop=np.float64(drop>0)
+    A_zimpute=np.float64(zimpute>0)
 
-m,n=np.shape(raw)
+    zero_expression_numbers=m*n-np.count_nonzero(A_raw)
 
-A_raw=np.float64(raw>0)
+    drop_position=A_raw-A_drop
 
-A_drop=np.float64(drop>0)
-A_zimpute=np.float64(zimpute>0)
+    drop_numbers=np.count_nonzero(drop_position)
 
-zero_expression_numbers=m*n-np.count_nonzero(A_raw)
+    #impute_position=A_zimpute-A_drop
 
-drop_position=A_raw-A_drop
+    #R=drop_position-impute_position
 
-drop_numbers=np.count_nonzero(drop_position)
+    R=A_raw-A_zimpute
 
-#impute_position=A_zimpute-A_drop
+    noimpute_numbers=np.count_nonzero(np.float64(R>0))
 
-#R=drop_position-impute_position
+    error_impute_numbers=np.count_nonzero(np.float64(R<0))
 
-R=A_raw-A_zimpute
+    t_rate=1-noimpute_numbers/drop_numbers
+    n_rate=1-error_impute_numbers/zero_expression_numbers
 
-noimpute_numbers=np.count_nonzero(np.float64(R>0))
+    print(t_rate,n_rate)
 
-error_impute_numbers=np.count_nonzero(np.float64(R<0))
-
-t_rate=1-noimpute_numbers/drop_numbers
-n_rate=1-error_impute_numbers/zero_expression_numbers
-
-print(t_rate,n_rate)
 
